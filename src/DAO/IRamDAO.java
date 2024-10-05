@@ -15,7 +15,7 @@ import java.util.List;
 public interface IRamDAO {
     
     // Get all codes of RAM items matching the provided type
-    List<String> getCode(String type);
+    List<String> genCode(String type);
     
     // Retrieve RAMItem by its unique code or an exact match
     RAMItem getRAM(RAMItem ram);

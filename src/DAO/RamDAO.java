@@ -7,6 +7,7 @@ package DAO;
 
 import data.RAMItem;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,8 +19,12 @@ public class RamDAO implements IRamDAO{
     private static final String FILE_NAME = "RAMModules.dat";
 
     @Override
-    public List<String> getCode(String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<String> genCode(String type) {
+        long count = ramItems.stream()
+                         .filter(ram -> ram.getType().equals(type))
+                         .count();
+    String code = String.format("RAM%s_%d", type, count + 1);
+    return Collections.singletonList(code);
     }
 
     @Override
