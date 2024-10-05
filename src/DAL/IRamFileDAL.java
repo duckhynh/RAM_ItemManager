@@ -12,8 +12,8 @@ import java.util.List;
  *
  * @author Hung
  */
+
 public interface IRamFileDAL {
-    List<RAMItem> loadFromfile();
-    List<RAMItem> saveToFile();
-    
+    List<RAMItem> loadFromFile();
+    boolean saveToFile(List<RAMItem> ramItems);
 }
