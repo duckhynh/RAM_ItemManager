@@ -14,38 +14,45 @@ import java.util.List;
  */
 public interface IRamDAO {
     
-    // Get all codes of RAM items matching the provided type
-    List<String> genCode(String type);
+      // Sinh mã RAM dựa trên loại (type)
+      String generateCode(String type);
     
-    // Retrieve RAMItem by its unique code or an exact match
-    RAMItem getRAM(RAMItem ram);
-    
-     // Check if an item with the given code exists
-    boolean isExist(String id);
-    
-    // Add a new RAM item
-    boolean addItem(RAMItem ramItem);
-    
-    // Search for RAM items based on a given criterion (e.g., type, brand, bus) and value
-    void search(String criterion, String value);
-    
-    // Update an existing RAM item identified by oldId with new RAM item data
-    boolean update(String oldId, RAMItem newRamItem);
-    
-    // Delete a RAM item by its id (code), returning the deleted item
-    RAMItem delete(String id);
-    
-    // Print all active RAM items
-    List<String> print();  // Returns a list of string representations of RAM items
-    
-    // Retrieve all RAM items
-    List<RAMItem> getAll();
-    
-    // Load RAM data from a file or data source
-    boolean load();
-    
-    // Save RAM data to a file or data source
-    boolean save();
+      // Kiểm tra mã RAM có tồn tại hay không
+      boolean isExistCode(String id);
+      
+      // Thêm RAM vào danh sách
+      boolean addItem(RAMItem ram);
+      
+      // Tìm kiếm RAM theo tiêu chí và giá trị
+      List<RAMItem> search(String criterion, String value);
+      
+      // Tìm kiếm RAM theo loại (type)
+      List<RAMItem> searchByType(String type);
+      
+      // Tìm kiếm RAM theo bus
+      List<RAMItem> searchByBus(String bus);
+      
+      // Tìm kiếm RAM theo thương hiệu (brand)
+      List<RAMItem> searchByBrand(String brand);
+      
+      // Cập nhật thông tin RAM dựa trên mã
+      boolean update(String id, RAMItem newRAM);
+      
+      // Xóa RAM (thực hiện bằng cách đặt active = false)
+      RAMItem delete(String id);
+      
+      // Hiển thị danh sách RAM đã sắp xếp (chỉ hiển thị các RAM active)
+      List<String> print();
+      
+      // Load dữ liệu từ file
+      boolean load();
+      
+      // Lưu dữ liệu vào file
+      boolean save();
+      
+      // Lấy tất cả các RAM
+      List<RAMItem> getAll();
+   
 }
     
 
