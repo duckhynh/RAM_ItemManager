@@ -148,4 +148,8 @@ public class RamDAO implements IRamDAO{
         }
         return result;
     }
+     // Phương thức lấy tất cả các item
+    public List<RAMItem> getAll() {
+        return new ArrayList<>(ramList); // Trả về một bản sao của danh sách
+    }
 }

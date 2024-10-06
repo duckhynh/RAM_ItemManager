@@ -5,6 +5,7 @@
  */
 package main;
 
+import Service.FileManagementSystem;
 import Tool.Menu;
 
 /**
@@ -13,8 +14,9 @@ import Tool.Menu;
  */
 public class Programer {
      public static void main(String[] args) {
- 
-
+         
+        FileManagementSystem filemanagementsystem = new FileManagementSystem();
+        
         Menu menu = new Menu();
         menu.addItem("Add an Item");
         menu.addItem("Search SubMenu");
@@ -31,31 +33,31 @@ public class Programer {
             switch (choice) {
                 case 1:
                     do {
-                       
+                      filemanagementsystem.createNewItem();
                     } while (!menu.confirmYesNo("Do you want to go back to Menu? (Y/N): "));
                     break;
                 case 2:
                     do {
-                        
+                      filemanagementsystem.searchItem();
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                 case 3:
                     do {
-                        
+                      filemanagementsystem.updateItem();
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                 case 4:
                     do {
-                        
+                      filemanagementsystem.deleteItem();
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                 case 5:
                     do {
-                        
+                      filemanagementsystem.printItems();
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                     case 6:
-                   
+                    filemanagementsystem.saveFile();
                     System.out.println("Changes have been successfully saved.");
                     break;
                 case 7:

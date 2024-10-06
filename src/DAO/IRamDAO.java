@@ -27,6 +27,8 @@ public interface IRamDAO {
     List<String> print();
     boolean load();
     boolean save();
+    List<RAMItem> getAll();
+
    
 }
 
