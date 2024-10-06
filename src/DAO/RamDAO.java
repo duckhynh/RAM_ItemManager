@@ -20,9 +20,7 @@ public class RamDAO implements IRamDAO{
 
     @Override
     public List<String> genCode(String type) {
-        long count = ramItems.stream()
-                         .filter(ram -> ram.getType().equals(type))
-                         .count();
+    long count = ramItems.stream().filter(ram -> ram.getType().equals(type)).count();
     String code = String.format("RAM%s_%d", type, count + 1);
     return Collections.singletonList(code);
     }
