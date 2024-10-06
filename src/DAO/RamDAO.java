@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import DAL.RamFileDAL;
 import data.RAMItem;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,14 @@ public class RamDAO implements IRamDAO{
     List<RAMItem> ramItems = new ArrayList<>();
     private static final String FILE_NAME = "RAMModules.dat";
     
-    @Override
+   // Danh sách RAMItem
+    private List<RAMItem> ramList;
+
+    public RamDAO() {
+    this.ramList = new ArrayList<>();
+    }
+
+    // Sinh mã RAM dựa trên loại (type)
     public String generateCode(String type) {
         List<RAMItem> list = this.searchByType(type);
         int y;
@@ -39,66 +47,105 @@ public class RamDAO implements IRamDAO{
         }
         return "RAM" + type + "_" + y;
     }
-    @Override
+
+    // Kiểm tra mã RAM có tồn tại hay không
     public boolean isExistCode(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isExistCode'");
-    }
-    @Override
-    public boolean addItem(RAMItem ram) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addItem'");
-    }
-    @Override
-    public List<RAMItem> search(String criterion, String value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'search'");
-    }
-    @Override
-    public List<RAMItem> searchByType(String type) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByType'");
-    }
-    @Override
-    public List<RAMItem> searchByBus(String bus) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByBus'");
-    }
-    @Override
-    public List<RAMItem> searchByBrand(String brand) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchByBrand'");
-    }
-    @Override
-    public boolean update(String id, RAMItem newRAM) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-    @Override
-    public RAMItem delete(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
-    }
-    @Override
-    public List<String> print() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'print'");
-    }
-    @Override
-    public boolean load() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'load'");
-    }
-    @Override
-    public boolean save() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
-    }
-    @Override
-    public List<RAMItem> getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    
+    // Thêm RAM vào danh sách
+    public boolean addItem(RAMItem ram) {
+        if (!isExistCode(ram.getCode())) {
+            ramList.add(ram);
+            return true;
+        }
+        return false;  // Nếu mã đã tồn tại, không thêm
+    }
+
+    // Tìm kiếm RAM theo tiêu chí (criterion: "type", "bus", "brand") và giá trị (value)
+    public List<RAMItem> search(String criterion, String value) {
+        List<RAMItem> result = new ArrayList<>();
+        for (RAMItem ram : ramList) {
+            if (criterion.equals("type") && ram.getType().equals(value)) {
+                result.add(ram);
+            } else if (criterion.equals("bus") && ram.getBus().equals(value)) {
+                result.add(ram);
+            } else if (criterion.equals("brand") && ram.getBrand().equals(value)) {
+                result.add(ram);
+            }
+        }
+        return result;
+    }
+
+    // Tìm kiếm RAM theo loại (type)
+    public List<RAMItem> searchByType(String type) {
+        return search("type", type);
+    }
+
+    // Tìm kiếm RAM theo bus
+    public List<RAMItem> searchByBus(String bus) {
+        return search("bus", bus);
+    }
+
+    // Tìm kiếm RAM theo thương hiệu (brand)
+    public List<RAMItem> searchByBrand(String brand) {
+        return search("brand", brand);
+    }
+
+    // Cập nhật thông tin RAM dựa trên mã
+    public boolean update(String id, RAMItem newRAM) {
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
+                ram.setType(newRAM.getType());
+                ram.setBus(newRAM.getBus());
+                ram.setBrand(newRAM.getBrand());
+                ram.setQuantity(newRAM.getQuantity());
+                ram.setProductMonthYear(newRAM.getProductMonthYear());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Xóa RAM (thực hiện bằng cách đặt active = false)
+    public RAMItem delete(String id) {
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
+                ram.setActive(false);
+                return ram;
+            }
+        }
+        return null;
+    }
+
+    // Hiển thị danh sách RAM đã sắp xếp (chỉ hiển thị các RAM active)
+    public List<String> print() {
+        List<RAMItem> activeList = new ArrayList<>();
+        for (RAMItem ram : ramList) {
+            if (ram.isActive()) {
+                activeList.add(ram);
+            }
+        }
+        Collections.sort(activeList, new Comparator<RAMItem>() {
+            @Override
+            public int compare(RAMItem r1, RAMItem r2) {
+                int typeComp = r1.getType().compareTo(r2.getType());
+                if (typeComp != 0) return typeComp;
+                int busComp = r1.getBus().compareTo(r2.getBus());
+                if (busComp != 0) return busComp;
+                return r1.getBrand().compareTo(r2.getBrand());
+            }
+        });
+
+        List<String> result = new ArrayList<>();
+        for (RAMItem ram : activeList) {
+            result.add(ram.toString());
+        }
+        return result;
+    }
 }
