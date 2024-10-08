@@ -21,34 +21,26 @@ import java.util.List;
  * @author Hung
  */
 public class RamFileDAL implements IRamFileDAL {
-
-    @Override
-    public List<RAMItem> loadFromFile() {
-        List<RAMItem> ramItems = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("RAMModules.dat"))) {
-        ramItems = (List<RAMItem>) ois.readObject();
-        } catch (FileNotFoundException e) {
-            System.out.println("No previous data found, starting fresh.");
-            return new ArrayList<>(); // Return an empty list
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return new ArrayList<>(); // Return an empty list
-        }
-        return ramItems;
-    }
+    private static final String FILE_NAME = "RAMModules.dat";
 
     @Override
     public boolean saveToFile(List<RAMItem> ramItems) {
-        if (ramItems == null) {
-            System.out.println("Cannot save null list.");
-            return false;
-        }
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("RAMModules.dat"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             oos.writeObject(ramItems);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public List<RAMItem> loadFromFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            return (List<RAMItem>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Trả về danh sách rỗng nếu có lỗi
         }
     }
 }

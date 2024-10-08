@@ -53,7 +53,7 @@ public class Programer {
                     break;
                 case 5:
                     do {
-                      filemanagementsystem.printItems();
+                      filemanagementsystem.printAllRAMItems();
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                     case 6:

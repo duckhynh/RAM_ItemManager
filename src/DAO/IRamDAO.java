@@ -26,7 +26,7 @@ public interface IRamDAO {
     RAMItem delete(String id);
     List<String> print();
     boolean load();
-    boolean save();
+    void saveFile();
     List<RAMItem> getAll();
 
    

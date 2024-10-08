@@ -10,6 +10,7 @@ package data;
  * @author Hung
  */
 public class RAMItem {
+    
     private String code;
     private String type;
     private String bus;
@@ -89,7 +90,7 @@ public class RAMItem {
 
     @Override
     public String toString() {
-    return String.format("RAMItem{code=%s, type=%s, bus=%s, brand=%s, quantity=%d, productMonthYear=%s, active=%b}",
+    return String.format("RAMItem{%s, %s, %s, %s, %d, s, %b}",
                          code, type, bus, brand, quantity, productMonthYear, active);
 }
 

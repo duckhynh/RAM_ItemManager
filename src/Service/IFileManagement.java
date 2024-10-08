@@ -5,6 +5,9 @@
  */
 package Service;
 
+import data.RAMItem;
+import java.util.List;
+
 /**
  *
  * @author Hung
@@ -16,5 +19,5 @@ interface IFileManagement {
     void deleteItem();
     void loadFile();
     void saveFile();
-    void printItems();
+    void printAllRAMItems();
 }

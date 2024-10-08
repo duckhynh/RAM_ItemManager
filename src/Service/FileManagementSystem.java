@@ -10,6 +10,9 @@ import DAL.RamFileDAL;
 import DAO.IRamDAO;
 import DAO.RamDAO;
 import data.RAMItem;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Scanner;
@@ -129,7 +132,7 @@ public class FileManagementSystem implements IFileManagement{
     }
 
     @Override
-    public void saveFile() {
+     public void saveFile() {
         boolean success = fileDAL.saveToFile(ramDAO.getAll());
         if (success) {
             System.out.println("Data saved to file successfully.");
@@ -138,10 +141,35 @@ public class FileManagementSystem implements IFileManagement{
         }
     }
 
+
     @Override
-    public void printItems() {
-        List<RAMItem> items = ramDAO.getAll();
-        items.forEach(System.out::println);
+    public void printAllRAMItems() {
+    if (ramDAO.getAll().isEmpty()) {
+        System.out.println("No RAM items available.");
+        return;
     }
+
+    // In tiêu đề bảng
+    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
+    System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n", 
+                  "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
+
+    System.out.println("|------|--------------|------------|------------|------------|---------|-----------------|----------------------|");
+
+    // In dữ liệu các mục RAM
+    int index = 1;
+    for (RAMItem ramItem : ramDAO.getAll()) {
+        System.out.printf("| %-4d | %-12s | %-10s | %-10s | %-10s | %-7d | %-15s | %-20s |\n",
+                          index++,
+                          ramItem.getCode(),
+                          ramItem.getType(),
+                          ramItem.getBus(),
+                          ramItem.getBrand(),
+                          ramItem.getQuantity(),
+                          ramItem.getProductMonthYear(),
+                          ramItem.isActive() ? "Yes" : "No");
+    }
+    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
 }
+    }
     
