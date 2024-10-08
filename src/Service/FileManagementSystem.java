@@ -34,7 +34,7 @@ public class FileManagementSystem implements IFileManagement{
         System.out.print("Enter Quantity: ");
         int quantity = Integer.parseInt(scanner.nextLine());
         System.out.print("Enter Production Month-Year (YYYY-MM): ");
-        YearMonth productMonthYear = YearMonth.parse(scanner.nextLine());
+        String productMonthYear = YearMonth.parse(scanner.nextLine()).toString();
 
         String code = ramDAO.generateCode(type);
         RAMItem ramItem = new RAMItem(code, type, bus, brand, quantity, productMonthYear, true);
@@ -93,17 +93,19 @@ public class FileManagementSystem implements IFileManagement{
 
     // Tạo một đối tượng RAMItem mới với thông tin cập nhật
     RAMItem updatedRAM = new RAMItem(
-        currentRAM.getCode(),
-        newType.isEmpty() ? currentRAM.getType() : newType,
-        newBus.isEmpty() ? currentRAM.getBus() : newBus,
-        newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
-        newQuantityStr.isEmpty() ? currentRAM.getQuantity() : Integer.parseInt(newQuantityStr),
-        currentRAM.getProductMonthYear() // Giữ nguyên ngày sản xuất
-    );
+    currentRAM.getCode(),
+    newType.isEmpty() ? currentRAM.getType() : newType,
+    newBus.isEmpty() ? currentRAM.getBus() : newBus,
+    newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
+    newQuantityStr.isEmpty() ? currentRAM.getQuantity() : Integer.parseInt(newQuantityStr),
+    currentRAM.getProductMonthYear(), // Giữ nguyên ngày sản xuất
+    currentRAM.isActive() // Thêm trạng thái 'active'
+);
 
-    // Cập nhật thông tin trong danh sách RAM
+// Cập nhật thông tin trong danh sách RAM
     ramDAO.update(code, updatedRAM);
     System.out.println("RAM item updated successfully!");
+
 }
 
 
