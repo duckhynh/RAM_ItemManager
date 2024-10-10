@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,8 +24,15 @@ import java.util.Scanner;
  */
 public class FileManagementSystem implements IFileManagement{
     private RamDAO ramDAO = new RamDAO();
-    private RamFileDAL fileDAL = new RamFileDAL();
     private Scanner scanner = new Scanner(System.in);
+    
+    private List<RAMItem> ramItems;
+    private RamFileDAL ramFileDAL = new RamFileDAL(); 
+
+    public FileManagementSystem() {
+        ramItems = new ArrayList<>();
+        ramFileDAL = new RamFileDAL();
+    }
 
     @Override
     public void createNewItem() {
@@ -124,24 +132,9 @@ public class FileManagementSystem implements IFileManagement{
         }
     }
 
-    @Override
-    public void loadFile() {
-        List<RAMItem> ramItems = fileDAL.loadFromFile();
-        ramItems.forEach(ramDAO::addItem);
-        System.out.println("Data loaded from file.");
-    }
-
-    @Override
-     public void saveFile() {
-        boolean success = fileDAL.saveToFile(ramDAO.getAll());
-        if (success) {
-            System.out.println("Data saved to file successfully.");
-        } else {
-            System.out.println("Failed to save data.");
-        }
-    }
-
-
+    
+     
+    
     @Override
     public void printAllRAMItems() {
     if (ramDAO.getAll().isEmpty()) {
@@ -171,5 +164,24 @@ public class FileManagementSystem implements IFileManagement{
     }
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
 }
+
+    @Override
+    public void loadFromFile() {
+        RamFileDAL f = new RamFileDAL();
+        List<RAMItem> RAMItems = f.readfile();
+        for(RAMItem r : RAMItems){
+            ramDAO.addItem(r);
+            
+        }
     }
+
+    @Override
+    public boolean saveToFile() {
+        RamFileDAL f = new RamFileDAL();
+        f.savefile(ramDAO.getAll());
+        return true;
+    }
+}
+    
+
     

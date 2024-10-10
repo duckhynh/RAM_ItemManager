@@ -5,8 +5,10 @@
  */
 package main;
 
+import DAO.RamDAO;
 import Service.FileManagementSystem;
 import Tool.Menu;
+import java.util.Scanner;
 
 /**
  *
@@ -57,8 +59,7 @@ public class Programer {
                     } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
                     break;
                     case 6:
-                    filemanagementsystem.saveFile();
-                    System.out.println("Changes have been successfully saved.");
+                    filemanagementsystem.saveToFile();
                     break;
                 case 7:
                     exit = true;

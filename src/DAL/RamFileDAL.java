@@ -6,6 +6,8 @@
 package DAL;
 
 import data.RAMItem;
+import java.io.EOFException;
+import java.io.File;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,24 +25,28 @@ import java.util.List;
 public class RamFileDAL implements IRamFileDAL {
     private static final String FILE_NAME = "RAMModules.dat";
 
+
     @Override
-    public boolean saveToFile(List<RAMItem> ramItems) {
+    public boolean savefile(List<RAMItem> ramList) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
-            oos.writeObject(ramItems);
+            oos.writeObject(ramList);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     @Override
-    public List<RAMItem> loadFromFile() {
+    public List<RAMItem> readfile() {
+        List<RAMItem> ramList = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
-            return (List<RAMItem>) ois.readObject();
+            ramList = (List<RAMItem>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found, starting with an empty list.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return new ArrayList<>(); // Trả về danh sách rỗng nếu có lỗi
         }
+        return ramList;
     }
 }

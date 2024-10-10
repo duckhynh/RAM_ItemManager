@@ -1,4 +1,7 @@
 package data;
+
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,8 +12,9 @@ package data;
  *
  * @author Hung
  */
-public class RAMItem {
+public class RAMItem implements Serializable{
     
+    private static final long serialVersionUID = 1L; 
     private String code;
     private String type;
     private String bus;
