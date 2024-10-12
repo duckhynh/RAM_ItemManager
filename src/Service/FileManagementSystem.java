@@ -5,14 +5,9 @@
  */
 package Service;
 
-import DAL.IRamFileDAL;
 import DAL.RamFileDAL;
-import DAO.IRamDAO;
 import DAO.RamDAO;
 import data.RAMItem;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +18,8 @@ import java.util.Scanner;
  * @author Hung
  */
 public class FileManagementSystem implements IFileManagement{
-    private RamDAO ramDAO = new RamDAO();
-    private Scanner scanner = new Scanner(System.in);
+    private final RamDAO ramDAO = new RamDAO();
+    private final Scanner scanner = new Scanner(System.in);
     
     private List<RAMItem> ramItems;
     private RamFileDAL ramFileDAL = new RamFileDAL(); 
@@ -133,8 +128,6 @@ public class FileManagementSystem implements IFileManagement{
     }
 
     
-     
-    
     @Override
     public void printAllRAMItems() {
     if (ramDAO.getAll().isEmpty()) {
@@ -164,17 +157,6 @@ public class FileManagementSystem implements IFileManagement{
     }
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
 }
-
-    @Override
-    public void loadFromFile() {
-        RamFileDAL f = new RamFileDAL();
-        List<RAMItem> RAMItems = f.readfile();
-        for(RAMItem r : RAMItems){
-            ramDAO.addItem(r);
-            
-        }
-    }
-
     @Override
     public boolean saveToFile() {
         RamFileDAL f = new RamFileDAL();

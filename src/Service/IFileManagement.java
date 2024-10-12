@@ -17,7 +17,6 @@ interface IFileManagement {
     void searchItem();
     void updateItem();
     void deleteItem();
-    void loadFromFile();
     boolean saveToFile();
     void printAllRAMItems();
 }

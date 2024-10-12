@@ -23,8 +23,18 @@ public class RamDAO implements IRamDAO{
    // Danh sách RAMItem
     private List<RAMItem> ramList;
 
+    private void loadFromFile() {
+       RamFileDAL fileManager = new RamFileDAL();
+
+        List<RAMItem> itemsFromFile = fileManager.readfile();
+        if (itemsFromFile != null) {
+            ramList.addAll(itemsFromFile);
+        }
+    }
+
     public RamDAO() {
-    this.ramList = new ArrayList<>();
+        this.ramList = new ArrayList<>(); 
+        loadFromFile();
     }
 
     // Sinh mã RAM dựa trên loại (type)
