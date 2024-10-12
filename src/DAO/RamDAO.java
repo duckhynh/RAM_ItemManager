@@ -31,7 +31,13 @@ public class RamDAO implements IRamDAO{
             ramList.addAll(itemsFromFile);
         }
     }
-
+    
+    public boolean saveToFile() {
+        RamFileDAL f = new RamFileDAL();
+        f.savefile(getAll());
+        return true;
+    }
+    
     public RamDAO() {
         this.ramList = new ArrayList<>(); 
         loadFromFile();

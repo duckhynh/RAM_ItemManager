@@ -25,8 +25,8 @@ public interface IRamDAO {
     boolean update(String id, RAMItem newRAM);
     RAMItem delete(String id);
     List<String> print();
-    boolean load();
-    void saveFile();
+    void load();
+    boolean saveToFile();
     List<RAMItem> getAll();
 
    
