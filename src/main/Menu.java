@@ -1,7 +1,7 @@
 package main;
 
 import java.util.ArrayList;
-import Tool.GetInput;
+import tool.GetInput;
 
 public class Menu extends ArrayList<String> implements IMenu{
 
