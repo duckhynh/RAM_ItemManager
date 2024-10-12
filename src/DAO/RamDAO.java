@@ -21,7 +21,7 @@ public class RamDAO implements IRamDAO{
     private static final String FILE_NAME = "RAMModules.dat";
     
    // Danh sách RAMItem
-    private List<RAMItem> ramList;
+    private final List<RAMItem> ramList;
 
     private void loadFromFile() {
        RamFileDAL fileManager = new RamFileDAL();
@@ -164,7 +164,7 @@ public class RamDAO implements IRamDAO{
         }
         return result;
     }
-     // Phương thức lấy tất cả các item
+    
     public List<RAMItem> getAll() {
         return new ArrayList<>(ramList); // Trả về một bản sao của danh sách
     }

@@ -5,10 +5,7 @@
  */
 package main;
 
-import DAO.RamDAO;
-import Service.FileManagementSystem;
-import Tool.Menu;
-import java.util.Scanner;
+import service.FileManagementSystem;
 
 /**
  *
