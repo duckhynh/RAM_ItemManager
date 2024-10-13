@@ -18,7 +18,7 @@ public class Menu extends ArrayList<String> implements IMenu{
     public int getChoice() {
         return GetInput.getInt(" => Enter your choice: ", 1, this.size());
     }
-
+    
     @Override
     public void showMenu() {
         System.out.println("------------------- MENU -------------------");

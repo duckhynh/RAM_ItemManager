@@ -36,10 +36,8 @@ public class Programer {
                     } while (!menu.confirmYesNo("Do you want to go back to Menu? (Y/N): "));
                     break;
                 case 2:
-                    do {
                       filemanagementsystem.searchItem();
-                    } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
-                    break;
+                      break;
                 case 3:
                     do {
                       filemanagementsystem.updateItem();
