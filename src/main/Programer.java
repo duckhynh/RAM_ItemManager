@@ -16,6 +16,7 @@ public class Programer {
          
         FileManagementSystem filemanagementsystem = new FileManagementSystem();
         
+        
         Menu menu = new Menu();
         menu.addItem("Add an Item");
         menu.addItem("Search SubMenu");
@@ -33,7 +34,7 @@ public class Programer {
                 case 1:
                     do {
                       filemanagementsystem.createNewItem();
-                    } while (!menu.confirmYesNo("Do you want to go back to Menu? (Y/N): "));
+                    } while (!menu.confirmBackToMenu());
                     break;
                 case 2:
                       filemanagementsystem.searchItem();
@@ -41,17 +42,17 @@ public class Programer {
                 case 3:
                     do {
                       filemanagementsystem.updateItem();
-                    } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
+                    } while (!menu.confirmBackToMenu());
                     break;
                 case 4:
                     do {
                       filemanagementsystem.deleteItem();
-                    } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
+                    } while (!menu.confirmBackToMenu());
                     break;
                 case 5:
                     do {
                       filemanagementsystem.printAllRAMItems();
-                    } while (!menu.confirmYesNo(" Do you want to go back to Menu? (Y/N): "));
+                    } while (!menu.confirmBackToMenu());
                     break;
                     case 6:
                     filemanagementsystem.saveToFile();

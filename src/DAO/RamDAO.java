@@ -19,10 +19,15 @@ import java.util.stream.Collectors;
  */
 public class RamDAO implements IRamDAO{
         List<RAMItem> ramItems = new ArrayList<>();
-        private static final String FILE_NAME = "RAMModules.dat";
+        protected static final String FILE_NAME = "RAMModules.dat";
 
        // Danh sách RAMItem
         private final List<RAMItem> ramList;
+        
+         public RamDAO() {
+            this.ramList = new ArrayList<>(); 
+            loadFromFile();
+        }
 
         private void loadFromFile() {
            RamFileDAL fileManager = new RamFileDAL();
@@ -37,11 +42,6 @@ public class RamDAO implements IRamDAO{
             RamFileDAL f = new RamFileDAL();
             f.savefile(getAll());
             return true;
-        }
-
-        public RamDAO() {
-            this.ramList = new ArrayList<>(); 
-            loadFromFile();
         }
 
         // Sinh mã RAM dựa trên loại (type)
@@ -87,18 +87,27 @@ public class RamDAO implements IRamDAO{
         // Tìm kiếm RAM theo tiêu chí (criterion: "type", "bus", "brand") và giá trị (value)
         public List<RAMItem> search(String criterion, String value) {
             List<RAMItem> result = new ArrayList<>();
+
             for (RAMItem ram : ramList) {
-                if (criterion.equals("type") && ram.getType().equals(value)) {
-                    result.add(ram);
-                } else if (criterion.equals("bus") && ram.getBus().equals(value)) {
-                    result.add(ram);
-                } else if (criterion.equals("brand") && ram.getBrand().equals(value)) {
+                if (matches(ram, criterion, value)) {
                     result.add(ram);
                 }
             }
+
             return result;
         }
-
+        
+        // Phương thức trợ giúp để kiểm tra xem RAMItem có khớp với tiêu chí đã cho không
+        private boolean matches(RAMItem ram, String criterion, String value) {
+            if (criterion.equals("type")) {
+                return ram.getType().equals(value);
+            } else if (criterion.equals("bus")) {
+                return ram.getBus().equals(value);
+            } else if (criterion.equals("brand")) {
+                return ram.getBrand().equals(value);
+            }
+            return false; // nếu không khớp tiêu chí nào
+        }
         // Tìm kiếm RAM theo loại (type)
         public List<RAMItem> searchByType(String type) {
             return search("type", type);

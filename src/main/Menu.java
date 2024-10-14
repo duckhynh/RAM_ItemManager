@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import tool.GetInput;
 
 public class Menu extends ArrayList<String> implements IMenu{
+    
+    private static final String BACK_TO_MENU_PROMPT = "Do you want to go back to Menu? (Y/N): ";
 
     public Menu(){
     }
@@ -40,5 +42,9 @@ public class Menu extends ArrayList<String> implements IMenu{
                 System.out.println("Please enter 'Y' or 'N' only.");
             }
         }
+    }
+    // New method to simplify calling the back-to-menu confirmation
+    public boolean confirmBackToMenu() {
+        return confirmYesNo(BACK_TO_MENU_PROMPT);
     }
 }
