@@ -5,6 +5,8 @@
  */
 package tool;
 
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -121,7 +123,18 @@ public class GetInput {
             }
         }
     }
-
+    
+    public static YearMonth getYearMonth(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                return YearMonth.parse(input); // Thử parse chuỗi đầu vào thành YearMonth
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid format. Please enter a date in the format YYYY-MM.");
+            }
+        }
+    }
     
     // Validate ID with regex
     final static String idRegex = "^[A-Z]\\d{4}$"; 

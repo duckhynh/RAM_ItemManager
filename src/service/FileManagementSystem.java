@@ -12,6 +12,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import tool.GetInput;
 
 /**
  *
@@ -31,19 +32,14 @@ public class FileManagementSystem implements IFileManagement{
 
     @Override
     public void createNewItem() {
-        System.out.print("Enter RAM Type: ");
-        String type = scanner.nextLine();
-        System.out.print("Enter Bus Speed: ");
-        String bus = scanner.nextLine();
-        System.out.print("Enter Brand: ");
-        String brand = scanner.nextLine();
-        System.out.print("Enter Quantity: ");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.print("Enter Production Month-Year (YYYY-MM): ");
-        String productMonthYear = YearMonth.parse(scanner.nextLine()).toString();
+        String type = GetInput.getString("Enter RAM: ");
+        int bus = GetInput.getInt("Enter Bus(must be a number):",0, 9999);        
+        String brand = GetInput.getString("Enter Brand: ");
+        int quantity = GetInput.getInt("Enter Quantity(must be a number):",0,9999);
+        YearMonth productMonthYear = GetInput.getYearMonth("Enter Production Month-Year (YYYY-MM): ");
 
         String code = ramDAO.generateCode(type);
-        RAMItem ramItem = new RAMItem(code, type, bus, brand, quantity, productMonthYear, true);
+        RAMItem ramItem = new RAMItem(code, type, String.valueOf(bus), brand, quantity, productMonthYear.toString(), true);
         if (ramDAO.addItem(ramItem)) {
             System.out.println("New RAM item added successfully!");
         } else {
@@ -160,63 +156,63 @@ public class FileManagementSystem implements IFileManagement{
         }
 
 
-            @Override
-            public void deleteItem() {
-                System.out.print("Enter RAM Code to delete: ");
-                String code = scanner.nextLine();
-                RAMItem ramItem = ramDAO.delete(code);
-                if (ramItem != null) {
-                    System.out.println("RAM has been deleted.");
-                } else {
-                    System.out.println("RAM item with this code not found.");
-                }
-            }
-
-
-            @Override
-            public void printAllRAMItems() {
-            // Fetch all RAM items
-            List<RAMItem> ramItems = ramDAO.getAll();
-
-            // Check if the list is empty
-            if (ramItems.isEmpty()) {
-                System.out.println("No RAM items available.");
-                return;
-            }
-
-            // Print table header
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n", 
-                              "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
-            System.out.println("|------|--------------|------------|------------|------------|---------|-----------------|----------------------|");
-
-            // Print data for active RAM items
-            int index = 1;
-            for (RAMItem ramItem : ramItems) {
-                if (ramItem.isActive()) {
-                    System.out.printf("| %-4d | %-12s | %-10s | %-10s | %-10s | %-7d | %-15s | %-20s |\n",
-                                      index++,
-                                      ramItem.getCode(),
-                                      ramItem.getType(),
-                                      ramItem.getBus(),
-                                      ramItem.getBrand(),
-                                      ramItem.getQuantity(),
-                                      ramItem.getProductMonthYear(),
-                                      ramItem.isActive() ? "Yes" : "No");
-                }
-            }
-
-            // Print table footer
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
-        }
-
-            @Override
-            public boolean saveToFile() {
-                RamFileDAL f = new RamFileDAL();
-                f.savefile(ramDAO.getAll());
-                return true;
+        @Override
+        public void deleteItem() {
+            System.out.print("Enter RAM Code to delete: ");
+            String code = scanner.nextLine();
+            RAMItem ramItem = ramDAO.delete(code);
+            if (ramItem != null) {
+                System.out.println("RAM has been deleted.");
+            } else {
+                System.out.println("RAM item with this code not found.");
             }
         }
+
+
+        @Override
+        public void printAllRAMItems() {
+        // Fetch all RAM items
+        List<RAMItem> ramItems = ramDAO.getAll();
+
+        // Check if the list is empty
+        if (ramItems.isEmpty()) {
+            System.out.println("No RAM items available.");
+            return;
+        }
+
+        // Print table header
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n", 
+                          "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
+        System.out.println("|------|--------------|------------|------------|------------|---------|-----------------|----------------------|");
+
+        // Print data for active RAM items
+        int index = 1;
+        for (RAMItem ramItem : ramItems) {
+            if (ramItem.isActive()) {
+                System.out.printf("| %-4d | %-12s | %-10s | %-10s | %-10s | %-7d | %-15s | %-20s |\n",
+                                  index++,
+                                  ramItem.getCode(),
+                                  ramItem.getType(),
+                                  ramItem.getBus(),
+                                  ramItem.getBrand(),
+                                  ramItem.getQuantity(),
+                                  ramItem.getProductMonthYear(),
+                                  ramItem.isActive() ? "Yes" : "No");
+            }
+        }
+
+        // Print table footer
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+        @Override
+        public boolean saveToFile() {
+            RamFileDAL f = new RamFileDAL();
+            f.savefile(ramDAO.getAll());
+            return true;
+        }
+    }
 
 
     
