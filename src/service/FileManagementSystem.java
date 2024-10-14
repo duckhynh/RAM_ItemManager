@@ -151,21 +151,26 @@ public class FileManagementSystem implements IFileManagement{
             String newBrand = GetInput.getNewString("Enter new brand (or press Enter to keep current):", currentRAM.getBrand());          
             int newQuantityStr = GetInput.getNewInt("Enter new quantity (or press Enter to keep current): ", 0, 9999, currentRAM.getQuantity());
 
-            // Tạo một đối tượng RAMItem mới với thông tin cập nhật
+
             RAMItem updatedRAM = new RAMItem(
             currentRAM.getCode(),
             newType.isEmpty() ? currentRAM.getType() : newType,
-            (newBus==currentBus) ? currentRAM.getBus() : String.valueOf(newBus),
+            (newBus == currentBus) ? currentRAM.getBus() : String.valueOf(newBus),
             newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
-            (newQuantityStr==0) ? currentRAM.getQuantity() : newQuantityStr,
+            (newQuantityStr == 0) ? currentRAM.getQuantity() : newQuantityStr,
             currentRAM.getProductMonthYear(), // Giữ nguyên ngày sản xuất
             currentRAM.isActive() // Thêm trạng thái 'active'
         );
 
+
         // Cập nhật thông tin trong danh sách RAM
-            ramDAO.update(code, updatedRAM);
-            System.out.println("RAM item updated successfully!");
-        }
+         if (ramDAO.update(currentRAM.getCode(), updatedRAM)) {
+        System.out.println("RAM item updated successfully!");
+    } else {
+        System.out.println("Failed to update RAM item. Please check if the code exists.");
+    }
+}
+               
 
 
         @Override

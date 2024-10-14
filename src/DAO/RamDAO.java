@@ -124,18 +124,27 @@ public class RamDAO implements IRamDAO{
 
         // Cập nhật thông tin RAM dựa trên mã
         public boolean update(String id, RAMItem newRAM) {
-            for (RAMItem ram : ramList) {
-                if (ram.getCode().equals(id)) {
-                    ram.setType(newRAM.getType());
-                    ram.setBus(newRAM.getBus());
-                    ram.setBrand(newRAM.getBrand());
-                    ram.setQuantity(newRAM.getQuantity());
-                    ram.setProductMonthYear(newRAM.getProductMonthYear());
-                    return true;
-                }
-            }
+        if (ramList == null || ramList.isEmpty()) {
+            System.out.println("RAM list is empty or null.");
             return false;
         }
+
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
+                ram.setType(newRAM.getType());
+                ram.setBus(newRAM.getBus());
+                ram.setBrand(newRAM.getBrand());
+                ram.setQuantity(newRAM.getQuantity());
+                ram.setProductMonthYear(newRAM.getProductMonthYear());
+                System.out.println("Updated RAM item: " + ram); // Kiểm tra thông tin sau khi cập nhật
+                return true;
+        }
+    }
+        System.out.println("No matching RAM found for update."); // Thông báo không tìm thấy
+        return false;
+}
+
+
 
         // Xóa RAM (thực hiện bằng cách đặt active = false)
         public RAMItem delete(String id) {
