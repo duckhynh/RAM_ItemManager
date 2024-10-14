@@ -99,11 +99,11 @@ public class RamDAO implements IRamDAO{
         // Phương thức trợ giúp để kiểm tra xem RAMItem có khớp với tiêu chí đã cho không
         private boolean matches(RAMItem ram, String criterion, String value) {
             if (criterion.equals("type")) {
-                return ram.getType().equals(value);
+                return ram.getType().equalsIgnoreCase(value);
             } else if (criterion.equals("bus")) {
-                return ram.getBus().equals(value);
+                return ram.getBus().equalsIgnoreCase(value);
             } else if (criterion.equals("brand")) {
-                return ram.getBrand().equals(value);
+                return ram.getBrand().equalsIgnoreCase(value);
             }
             return false; // nếu không khớp tiêu chí nào
         }

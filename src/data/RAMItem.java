@@ -94,8 +94,10 @@ public class RAMItem implements Serializable{
 
     @Override
     public String toString() {
-    return String.format("RAMItem{%s, %s, %s, %s, %d, s, %b}",
-                         code, type, bus, brand, quantity, productMonthYear, active);
+    return String.format(
+    "RAMItem [ Code: %s | Type: %s | Bus: %s | Brand: %s | Quantity: %d | Product Month/Year: %s | Active: %b ]",
+    code, type, bus, brand, quantity, productMonthYear, active);
+
 }
 
     
