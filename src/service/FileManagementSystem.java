@@ -170,8 +170,7 @@ public class FileManagementSystem implements IFileManagement {
 
     @Override
     public void deleteItem() {
-        System.out.print("Enter RAM Code to delete: ");
-        String code = scanner.nextLine();
+        String code = GetInput.getString("Enter RAM Code to delete:");
         RAMItem ramItem = ramDAO.delete(code);
         if (ramItem != null) {
             System.out.println("RAM has been deleted.");
@@ -193,8 +192,7 @@ public class FileManagementSystem implements IFileManagement {
 
         // Print table header
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n",
-                "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
+        System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n", "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
         System.out.println("|------|--------------|------------|------------|------------|---------|-----------------|----------------------|");
 
         // Print data for active RAM items
