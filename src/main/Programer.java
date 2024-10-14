@@ -12,12 +12,11 @@ import service.FileManagementSystem;
  * @author Hung
  */
 public class Programer {
-     
-     public static void main(String[] args) {
-         
+
+    public static void main(String[] args) {
+
         FileManagementSystem filemanagementsystem = new FileManagementSystem();
-        
-        
+
         Menu menu = new Menu();
         menu.addItem("Add an Item");
         menu.addItem("Search SubMenu");
@@ -34,28 +33,28 @@ public class Programer {
             switch (choice) {
                 case 1:
                     do {
-                      filemanagementsystem.createNewItem();
+                        filemanagementsystem.createNewItem();
                     } while (!menu.confirmBackToMenu());
                     break;
                 case 2:
-                      filemanagementsystem.searchItem();
-                      break;
+                    filemanagementsystem.searchItem();
+                    break;
                 case 3:
                     do {
-                      filemanagementsystem.updateItem();
+                        filemanagementsystem.updateItem();
                     } while (!menu.confirmBackToMenu());
                     break;
                 case 4:
                     do {
-                      filemanagementsystem.deleteItem();
+                        filemanagementsystem.deleteItem();
                     } while (!menu.confirmBackToMenu());
                     break;
                 case 5:
                     do {
-                      filemanagementsystem.printAllRAMItems();
+                        filemanagementsystem.printAllRAMItems();
                     } while (!menu.confirmBackToMenu());
                     break;
-                    case 6:
+                case 6:
                     filemanagementsystem.saveToFile();
                     break;
                 case 7:
@@ -65,7 +64,7 @@ public class Programer {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-            
+
         }
     }
 }

@@ -18,12 +18,13 @@ import tool.GetInput;
  *
  * @author Hung
  */
-public class FileManagementSystem implements IFileManagement{
+public class FileManagementSystem implements IFileManagement {
+
     private final RamDAO ramDAO = new RamDAO();
     private final Scanner scanner = new Scanner(System.in);
-    
+
     private List<RAMItem> ramItems;
-    private RamFileDAL ramFileDAL = new RamFileDAL(); 
+    private RamFileDAL ramFileDAL = new RamFileDAL();
 
     public FileManagementSystem() {
         ramItems = new ArrayList<>();
@@ -33,9 +34,9 @@ public class FileManagementSystem implements IFileManagement{
     @Override
     public void createNewItem() {
         String type = GetInput.getString("Enter RAM: ");
-        int bus = GetInput.getInt("Enter Bus(must be a number):",0, 9999);        
+        int bus = GetInput.getInt("Enter Bus(must be a number):", 0, 9999);
         String brand = GetInput.getString("Enter Brand: ");
-        int quantity = GetInput.getInt("Enter Quantity(must be a number):",0,9999);
+        int quantity = GetInput.getInt("Enter Quantity(must be a number):", 0, 9999);
         YearMonth productMonthYear = GetInput.getYearMonth("Enter Production Month-Year (YYYY-MM): ");
 
         String code = ramDAO.generateCode(type);
@@ -48,10 +49,10 @@ public class FileManagementSystem implements IFileManagement{
     }
 
     @Override
-        public void searchItem() {
-            boolean keepSearching = true;
+    public void searchItem() {
+        boolean keepSearching = true;
 
-            while (keepSearching) {
+        while (keepSearching) {
             System.out.println("----------------------------------------");
             System.out.println("|              SUB MENU                |");
             System.out.println("----------------------------------------");
@@ -62,132 +63,125 @@ public class FileManagementSystem implements IFileManagement{
             System.out.println("| 4. Return to Main Menu               |");
             System.out.println("----------------------------------------");
 
-                int choice = Integer.parseInt(scanner.nextLine());
+            int choice = Integer.parseInt(scanner.nextLine());
 
-                if (choice == 4) {
-                    keepSearching = false; // Exit the loop to return to the main menu
-                    continue;
+            if (choice == 4) {
+                keepSearching = false; // Exit the loop to return to the main menu
+                continue;
+            }
+
+            String criterion;
+            switch (choice) {
+                case 1:
+                    criterion = "type";
+                    break;
+                case 2:
+                    criterion = "bus";
+                    break;
+                case 3:
+                    criterion = "brand";
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    continue; // Skip the rest and prompt again
                 }
 
-                String criterion;
-                switch (choice) {
-                    case 1:
-                        criterion = "type";
-                        break;
-                    case 2:
-                        criterion = "bus";
-                        break;
-                    case 3:
-                        criterion = "brand";
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        continue; // Skip the rest and prompt again
-                }
-                
-                System.out.print("Enter value to search: ");
-                String value = scanner.nextLine();
+            System.out.print("Enter value to search: ");
+            String value = scanner.nextLine();
 
-                List<RAMItem> result = ramDAO.search(criterion, value);
-                if (result.isEmpty()) {
-                    System.out.println("No matching RAM items found.");
-                } else {
-                 // In đường viền trên
+            List<RAMItem> result = ramDAO.search(criterion, value);
+            if (result.isEmpty()) {
+                System.out.println("No matching RAM items found.");
+            } else {
+                // In đường viền trên
                 System.out.println("===============================================================");
                 // In tiêu đề
-                System.out.printf("| %-10s | %-10s | %-10s | %-10s | %-8s |\n", 
-                                  "Code", "Type", "Bus", "Brand", "Qty");
+                System.out.printf("| %-10s | %-10s | %-10s | %-10s | %-8s |\n",
+                        "Code", "Type", "Bus", "Brand", "Qty");
                 System.out.println("===============================================================");
 
                 // In dữ liệu từng sản phẩm RAM
                 result.forEach(item -> System.out.printf("| %-10s | %-10s | %-10s | %-10s | %-8d |\n",
-                    item.getCode(), item.getType(), item.getBus(), item.getBrand(), item.getQuantity()));
+                        item.getCode(), item.getType(), item.getBus(), item.getBrand(), item.getQuantity()));
 
                 // In đường viền dưới
                 System.out.println("===============================================================");
-                }
             }
         }
+    }
 
+    @Override
+    public void updateItem() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter RAM Code to update: ");
+        String code = scanner.nextLine();
 
-            @Override
-            public void updateItem() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter RAM Code to update: ");
-            String code = scanner.nextLine();
+        // Tìm tất cả mục RAM hiện tại theo mã
+        List<RAMItem> foundItems = ramDAO.searchByType(code); // Tìm kiếm theo mã
+        if (foundItems.isEmpty()) {
+            System.out.println("RAM item with this code not found.");
+            return;
+        }
 
-             // Tìm tất cả mục RAM hiện tại theo mã
-            List<RAMItem> foundItems = ramDAO.searchByType(code); // Tìm kiếm theo mã
-            if (foundItems.isEmpty()) {
-                System.out.println("RAM item with this code not found.");
-                return;
-            }
+        // Hiển thị thông tin hiện tại cho tất cả các mục
+        System.out.println("Current RAM Information:");
+        for (int i = 0; i < foundItems.size(); i++) {
+            System.out.println((i + 1) + ". " + foundItems.get(i));
+        }
 
-            // Hiển thị thông tin hiện tại cho tất cả các mục
-            System.out.println("Current RAM Information:");
-            for (int i = 0; i < foundItems.size(); i++) {
-                System.out.println((i + 1) + ". " + foundItems.get(i));
-            }
+        // Nhập chỉ số của mục muốn cập nhật
+        System.out.print("Select item number to update (1-" + foundItems.size() + "): ");
+        int selectedIndex = Integer.parseInt(scanner.nextLine()) - 1;
 
-            // Nhập chỉ số của mục muốn cập nhật
-            System.out.print("Select item number to update (1-" + foundItems.size() + "): ");
-            int selectedIndex = Integer.parseInt(scanner.nextLine()) - 1;
+        // Kiểm tra chỉ số hợp lệ
+        if (selectedIndex < 0 || selectedIndex >= foundItems.size()) {
+            System.out.println("Invalid selection. Update canceled.");
+            return;
+        }
 
-            // Kiểm tra chỉ số hợp lệ
-            if (selectedIndex < 0 || selectedIndex >= foundItems.size()) {
-                System.out.println("Invalid selection. Update canceled.");
-                return;
-            }
+        RAMItem currentRAM = foundItems.get(selectedIndex); // Lấy mục RAM được chọn
 
-            RAMItem currentRAM = foundItems.get(selectedIndex); // Lấy mục RAM được chọn
+        String busString = currentRAM.getBus(); // Lấy giá trị bus dưới dạng String
+        int currentBus = Integer.parseInt(busString); // Chuyển đổi sang int
 
-            String busString = currentRAM.getBus(); // Lấy giá trị bus dưới dạng String
-            int currentBus = Integer.parseInt(busString); // Chuyển đổi sang int
+        // Nhập thông tin mới từ người dùng
+        String newType = GetInput.getNewString("Enter new type (or press Enter to keep current):", currentRAM.getType());
+        int newBus = GetInput.getNewInt("Enter new bus (or press Enter to keep current):", 0, 9999, currentBus);
+        String newBrand = GetInput.getNewString("Enter new brand (or press Enter to keep current):", currentRAM.getBrand());
+        int newQuantityStr = GetInput.getNewInt("Enter new quantity (or press Enter to keep current): ", 0, 9999, currentRAM.getQuantity());
 
-        
-            // Nhập thông tin mới từ người dùng
-            String newType = GetInput.getNewString("Enter new type (or press Enter to keep current):", currentRAM.getType());
-            int newBus = GetInput.getNewInt("Enter new bus (or press Enter to keep current):", 0, 9999, currentBus);
-            String newBrand = GetInput.getNewString("Enter new brand (or press Enter to keep current):", currentRAM.getBrand());          
-            int newQuantityStr = GetInput.getNewInt("Enter new quantity (or press Enter to keep current): ", 0, 9999, currentRAM.getQuantity());
-
-
-            RAMItem updatedRAM = new RAMItem(
-            currentRAM.getCode(),
-            newType.isEmpty() ? currentRAM.getType() : newType,
-            (newBus == currentBus) ? currentRAM.getBus() : String.valueOf(newBus),
-            newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
-            (newQuantityStr == 0) ? currentRAM.getQuantity() : newQuantityStr,
-            currentRAM.getProductMonthYear(), // Giữ nguyên ngày sản xuất
-            currentRAM.isActive() // Thêm trạng thái 'active'
+        RAMItem updatedRAM = new RAMItem(
+                currentRAM.getCode(),
+                newType.isEmpty() ? currentRAM.getType() : newType,
+                (newBus == currentBus) ? currentRAM.getBus() : String.valueOf(newBus),
+                newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
+                (newQuantityStr == 0) ? currentRAM.getQuantity() : newQuantityStr,
+                currentRAM.getProductMonthYear(), // Giữ nguyên ngày sản xuất
+                currentRAM.isActive() // Thêm trạng thái 'active'
         );
 
-
         // Cập nhật thông tin trong danh sách RAM
-         if (ramDAO.update(currentRAM.getCode(), updatedRAM)) {
-        System.out.println("RAM item updated successfully!");
-    } else {
-        System.out.println("Failed to update RAM item. Please check if the code exists.");
-    }
-}
-               
-
-
-        @Override
-        public void deleteItem() {
-            System.out.print("Enter RAM Code to delete: ");
-            String code = scanner.nextLine();
-            RAMItem ramItem = ramDAO.delete(code);
-            if (ramItem != null) {
-                System.out.println("RAM has been deleted.");
-            } else {
-                System.out.println("RAM item with this code not found.");
-            }
+        if (ramDAO.update(currentRAM.getCode(), updatedRAM)) {
+            System.out.println("RAM item updated successfully!");
+        } else {
+            System.out.println("Failed to update RAM item. Please check if the code exists.");
         }
+    }
 
+    @Override
+    public void deleteItem() {
+        System.out.print("Enter RAM Code to delete: ");
+        String code = scanner.nextLine();
+        RAMItem ramItem = ramDAO.delete(code);
+        if (ramItem != null) {
+            System.out.println("RAM has been deleted.");
+        } else {
+            System.out.println("RAM item with this code not found.");
+        }
+    }
 
-        @Override
-        public void printAllRAMItems() {
+    @Override
+    public void printAllRAMItems() {
         // Fetch all RAM items
         List<RAMItem> ramItems = ramDAO.getAll();
 
@@ -199,8 +193,8 @@ public class FileManagementSystem implements IFileManagement{
 
         // Print table header
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n", 
-                          "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
+        System.out.printf("| %-4s | %-12s | %-10s | %-10s | %-10s | %-7s | %-15s | %-20s |\n",
+                "No.", "Code", "Type", "Bus", "Brand", "Qty", "Production Date", "Active");
         System.out.println("|------|--------------|------------|------------|------------|---------|-----------------|----------------------|");
 
         // Print data for active RAM items
@@ -208,14 +202,14 @@ public class FileManagementSystem implements IFileManagement{
         for (RAMItem ramItem : ramItems) {
             if (ramItem.isActive()) {
                 System.out.printf("| %-4d | %-12s | %-10s | %-10s | %-10s | %-7d | %-15s | %-20s |\n",
-                                  index++,
-                                  ramItem.getCode(),
-                                  ramItem.getType(),
-                                  ramItem.getBus(),
-                                  ramItem.getBrand(),
-                                  ramItem.getQuantity(),
-                                  ramItem.getProductMonthYear(),
-                                  ramItem.isActive() ? "Yes" : "No");
+                        index++,
+                        ramItem.getCode(),
+                        ramItem.getType(),
+                        ramItem.getBus(),
+                        ramItem.getBrand(),
+                        ramItem.getQuantity(),
+                        ramItem.getProductMonthYear(),
+                        ramItem.isActive() ? "Yes" : "No");
             }
         }
 
@@ -223,13 +217,10 @@ public class FileManagementSystem implements IFileManagement{
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-        @Override
-        public boolean saveToFile() {
-            RamFileDAL f = new RamFileDAL();
-            f.savefile(ramDAO.getAll());
-            return true;
-        }
+    @Override
+    public boolean saveToFile() {
+        RamFileDAL f = new RamFileDAL();
+        f.savefile(ramDAO.getAll());
+        return true;
     }
-
-
-    
+}

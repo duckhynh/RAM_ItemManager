@@ -20,8 +20,8 @@ import java.util.List;
  * @author Hung
  */
 public class RamFileDAL implements IRamFileDAL {
-    private static final String FILE_NAME = "RAMModules.dat";
 
+    private static final String FILE_NAME = "RAMModules.dat";
 
     @Override
     public boolean savefile(List<RAMItem> ramList) {

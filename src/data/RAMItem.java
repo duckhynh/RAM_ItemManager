@@ -7,21 +7,20 @@ import java.io.Serializable;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Hung
  */
-public class RAMItem implements Serializable{
-    
-    private static final long serialVersionUID = 1L; 
+public class RAMItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String code;
     private String type;
     private String bus;
     private String brand;
     private int quantity;
     private String productMonthYear;
-    private boolean active; 
+    private boolean active;
 
     public RAMItem() {
     }
@@ -94,11 +93,10 @@ public class RAMItem implements Serializable{
 
     @Override
     public String toString() {
-    return String.format(
-    "RAMItem [ Code: %s | Type: %s | Bus: %s | Brand: %s | Quantity: %d | Product Month/Year: %s | Active: %b ]",
-    code, type, bus, brand, quantity, productMonthYear, active);
+        return String.format(
+                "RAMItem [ Code: %s | Type: %s | Bus: %s | Brand: %s | Quantity: %d | Product Month/Year: %s | Active: %b ]",
+                code, type, bus, brand, quantity, productMonthYear, active);
 
-}
+    }
 
-    
 }

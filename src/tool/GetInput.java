@@ -14,6 +14,7 @@ import java.util.Scanner;
  * @author Hung
  */
 public class GetInput {
+
     private static Scanner scanner = new Scanner(System.in);
 
     // Get input as a String
@@ -63,13 +64,14 @@ public class GetInput {
             }
         }
     }
+
     // Get new int value or keep the current value if left blank
     public static String getNewString(String prompt, String currentValue) {
         System.out.print(prompt);
         String input = scanner.nextLine().trim();
         return input.isEmpty() ? currentValue : input;
     }
-    
+
     // Get new int value or keep the current value if left blank
     public static int getNewInt(String prompt, int min, int max, int currentValue) {
         System.out.print(prompt + " (Current: " + currentValue + "): ");
@@ -89,7 +91,7 @@ public class GetInput {
         }
         return currentValue;
     }
-    
+
     // Get new double value or keep the current value if left blank
     public static double getNewDouble(String prompt, double min, double max, double currentValue) {
         System.out.print(prompt + " (Current: " + currentValue + "): ");
@@ -109,6 +111,7 @@ public class GetInput {
         }
         return currentValue;
     }
+
     // Get input as a boolean (Yes/No)
     public static boolean getBoolean(String prompt) {
         while (true) {
@@ -123,7 +126,7 @@ public class GetInput {
             }
         }
     }
-    
+
     public static YearMonth getYearMonth(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -135,10 +138,9 @@ public class GetInput {
             }
         }
     }
-    
-    // Validate ID with regex
-    final static String idRegex = "^[A-Z]\\d{4}$"; 
 
+    // Validate ID with regex
+    final static String idRegex = "^[A-Z]\\d{4}$";
 
     public static String getValidId(String prompt) {
         return getValidInput(prompt, idRegex, "Invalid ID format. Please enter a valid ID with PXXXX.");

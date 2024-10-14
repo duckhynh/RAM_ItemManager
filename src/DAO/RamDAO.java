@@ -16,114 +16,116 @@ import java.util.List;
  *
  * @author Hung
  */
-public class RamDAO implements IRamDAO{
-        List<RAMItem> ramItems = new ArrayList<>();
-        protected static final String FILE_NAME = "RAMModules.dat";
+public class RamDAO implements IRamDAO {
 
-       // Danh sách RAMItem
-        private final List<RAMItem> ramList;
-        
-         public RamDAO() {
-            this.ramList = new ArrayList<>(); 
-            loadFromFile();
+    List<RAMItem> ramItems = new ArrayList<>();
+    protected static final String FILE_NAME = "RAMModules.dat";
+
+    // Danh sách RAMItem
+    private final List<RAMItem> ramList;
+
+    public RamDAO() {
+        this.ramList = new ArrayList<>();
+        loadFromFile();
+    }
+
+    private void loadFromFile() {
+        RamFileDAL fileManager = new RamFileDAL();
+
+        List<RAMItem> itemsFromFile = fileManager.readfile();
+        if (itemsFromFile != null) {
+            ramList.addAll(itemsFromFile);
         }
+    }
 
-        private void loadFromFile() {
-           RamFileDAL fileManager = new RamFileDAL();
+    public boolean saveToFile() {
+        RamFileDAL f = new RamFileDAL();
+        f.savefile(getAll());
+        return true;
+    }
 
-            List<RAMItem> itemsFromFile = fileManager.readfile();
-            if (itemsFromFile != null) {
-                ramList.addAll(itemsFromFile);
-            }
-        }
-
-        public boolean saveToFile() {
-            RamFileDAL f = new RamFileDAL();
-            f.savefile(getAll());
-            return true;
-        }
-
-        // Sinh mã RAM dựa trên loại (type)
-        public String generateCode(String type) {
-            List<RAMItem> list = this.searchByType(type);
-            int y;
-            if (list == null || list.isEmpty()) {
-                y = 1;
-            } else {
-                Collections.sort(list, new Comparator<RAMItem>() {
-                    @Override
-                    public int compare(RAMItem r1, RAMItem r2) {
-                        return r1.getCode().compareTo(r2.getCode());
-                    }
-                });
-                RAMItem lastRAM = list.get(list.size() - 1);
-                String lastCode = lastRAM.getCode();
-                String[] parts = lastCode.split("_");
-                y = Integer.parseInt(parts[1]) + 1;
-            }
-            return "RAM" + type + "_" + y;
-        }
-
-        // Kiểm tra mã RAM có tồn tại hay không
-        public boolean isExistCode(String id) {
-            for (RAMItem ram : ramList) {
-                if (ram.getCode().equals(id)) {
-                    return true;
+    // Sinh mã RAM dựa trên loại (type)
+    public String generateCode(String type) {
+        List<RAMItem> list = this.searchByType(type);
+        int y;
+        if (list == null || list.isEmpty()) {
+            y = 1;
+        } else {
+            Collections.sort(list, new Comparator<RAMItem>() {
+                @Override
+                public int compare(RAMItem r1, RAMItem r2) {
+                    return r1.getCode().compareTo(r2.getCode());
                 }
-            }
-            return false;
+            });
+            RAMItem lastRAM = list.get(list.size() - 1);
+            String lastCode = lastRAM.getCode();
+            String[] parts = lastCode.split("_");
+            y = Integer.parseInt(parts[1]) + 1;
         }
+        return "RAM" + type + "_" + y;
+    }
 
-        // Thêm RAM vào danh sách
-        public boolean addItem(RAMItem ram) {
-            if (!isExistCode(ram.getCode())) {
-                ramList.add(ram);
+    // Kiểm tra mã RAM có tồn tại hay không
+    public boolean isExistCode(String id) {
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
                 return true;
             }
-            return false;  // Nếu mã đã tồn tại, không thêm
         }
+        return false;
+    }
 
-        // Tìm kiếm RAM theo tiêu chí (criterion: "type", "bus", "brand") và giá trị (value)
-        public List<RAMItem> search(String criterion, String value) {
-            List<RAMItem> result = new ArrayList<>();
+    // Thêm RAM vào danh sách
+    public boolean addItem(RAMItem ram) {
+        if (!isExistCode(ram.getCode())) {
+            ramList.add(ram);
+            return true;
+        }
+        return false;  // Nếu mã đã tồn tại, không thêm
+    }
 
-            for (RAMItem ram : ramList) {
-                if (matches(ram, criterion, value)) {
-                    result.add(ram);
-                }
+    // Tìm kiếm RAM theo tiêu chí (criterion: "type", "bus", "brand") và giá trị (value)
+    public List<RAMItem> search(String criterion, String value) {
+        List<RAMItem> result = new ArrayList<>();
+
+        for (RAMItem ram : ramList) {
+            if (matches(ram, criterion, value)) {
+                result.add(ram);
             }
-
-            return result;
-        }
-        
-        // Phương thức trợ giúp để kiểm tra xem RAMItem có khớp với tiêu chí đã cho không
-        private boolean matches(RAMItem ram, String criterion, String value) {
-            if (criterion.equals("type")) {
-                return ram.getType().equalsIgnoreCase(value);
-            } else if (criterion.equals("bus")) {
-                return ram.getBus().equalsIgnoreCase(value);
-            } else if (criterion.equals("brand")) {
-                return ram.getBrand().equalsIgnoreCase(value);
-            }
-            return false; // nếu không khớp tiêu chí nào
-        }
-        // Tìm kiếm RAM theo loại (type)
-        public List<RAMItem> searchByType(String type) {
-            return search("type", type);
         }
 
-        // Tìm kiếm RAM theo bus
-        public List<RAMItem> searchByBus(String bus) {
-            return search("bus", bus);
-        }
+        return result;
+    }
 
-        // Tìm kiếm RAM theo thương hiệu (brand)
-        public List<RAMItem> searchByBrand(String brand) {
-            return search("brand", brand);
+    // Phương thức trợ giúp để kiểm tra xem RAMItem có khớp với tiêu chí đã cho không
+    private boolean matches(RAMItem ram, String criterion, String value) {
+        if (criterion.equals("type")) {
+            return ram.getType().equalsIgnoreCase(value);
+        } else if (criterion.equals("bus")) {
+            return ram.getBus().equalsIgnoreCase(value);
+        } else if (criterion.equals("brand")) {
+            return ram.getBrand().equalsIgnoreCase(value);
         }
+        return false; // nếu không khớp tiêu chí nào
+    }
+    // Tìm kiếm RAM theo loại (type)
 
-        // Cập nhật thông tin RAM dựa trên mã
-        public boolean update(String id, RAMItem newRAM) {
+    public List<RAMItem> searchByType(String type) {
+        return search("type", type);
+    }
+
+    // Tìm kiếm RAM theo bus
+    public List<RAMItem> searchByBus(String bus) {
+        return search("bus", bus);
+    }
+
+    // Tìm kiếm RAM theo thương hiệu (brand)
+    public List<RAMItem> searchByBrand(String brand) {
+        return search("brand", brand);
+    }
+
+    // Cập nhật thông tin RAM dựa trên mã
+    public boolean update(String id, RAMItem newRAM) {
         if (ramList == null || ramList.isEmpty()) {
             System.out.println("RAM list is empty or null.");
             return false;
@@ -138,53 +140,54 @@ public class RamDAO implements IRamDAO{
                 ram.setProductMonthYear(newRAM.getProductMonthYear());
                 System.out.println("Updated RAM item: " + ram); // Kiểm tra thông tin sau khi cập nhật
                 return true;
+            }
         }
-    }
         System.out.println("No matching RAM found for update."); // Thông báo không tìm thấy
         return false;
-}
+    }
 
-
-
-        // Xóa RAM (thực hiện bằng cách đặt active = false)
-        public RAMItem delete(String id) {
-            for (RAMItem ram : ramList) {
-                if (ram.getCode().equals(id)) {
-                    ram.setActive(false);
-                    return ram;
-                }
+    // Xóa RAM (thực hiện bằng cách đặt active = false)
+    public RAMItem delete(String id) {
+        for (RAMItem ram : ramList) {
+            if (ram.getCode().equals(id)) {
+                ram.setActive(false);
+                return ram;
             }
-            return null;
         }
+        return null;
+    }
 
-
-        // Hiển thị danh sách RAM đã sắp xếp (chỉ hiển thị các RAM active)
-        public List<String> print() {
-            List<RAMItem> activeList = new ArrayList<>();
-            for (RAMItem ram : ramList) {
-                if (ram.isActive()) {
-                    activeList.add(ram);
-                }
+    // Hiển thị danh sách RAM đã sắp xếp (chỉ hiển thị các RAM active)
+    public List<String> print() {
+        List<RAMItem> activeList = new ArrayList<>();
+        for (RAMItem ram : ramList) {
+            if (ram.isActive()) {
+                activeList.add(ram);
             }
-            Collections.sort(activeList, new Comparator<RAMItem>() {
-                @Override
-                public int compare(RAMItem r1, RAMItem r2) {
-                    int typeComp = r1.getType().compareTo(r2.getType());
-                    if (typeComp != 0) return typeComp;
-                    int busComp = r1.getBus().compareTo(r2.getBus());
-                    if (busComp != 0) return busComp;
-                    return r1.getBrand().compareTo(r2.getBrand());
+        }
+        Collections.sort(activeList, new Comparator<RAMItem>() {
+            @Override
+            public int compare(RAMItem r1, RAMItem r2) {
+                int typeComp = r1.getType().compareTo(r2.getType());
+                if (typeComp != 0) {
+                    return typeComp;
                 }
-            });
-
-            List<String> result = new ArrayList<>();
-            for (RAMItem ram : activeList) {
-                result.add(ram.toString());
+                int busComp = r1.getBus().compareTo(r2.getBus());
+                if (busComp != 0) {
+                    return busComp;
+                }
+                return r1.getBrand().compareTo(r2.getBrand());
             }
-            return result;
-        }
+        });
 
-        public List<RAMItem> getAll() {
-            return new ArrayList<>(ramList); // Trả về một bản sao của danh sách
+        List<String> result = new ArrayList<>();
+        for (RAMItem ram : activeList) {
+            result.add(ram.toString());
         }
+        return result;
+    }
+
+    public List<RAMItem> getAll() {
+        return new ArrayList<>(ramList); // Trả về một bản sao của danh sách
+    }
 }

@@ -3,13 +3,12 @@ package main;
 import java.util.ArrayList;
 import tool.GetInput;
 
-public class Menu extends ArrayList<String> implements IMenu{
-    
+public class Menu extends ArrayList<String> implements IMenu {
+
     private static final String BACK_TO_MENU_PROMPT = "Do you want to go back to Menu? (Y/N): ";
 
-    public Menu(){
+    public Menu() {
     }
-
 
     @Override
     public void addItem(String s) {
@@ -20,12 +19,12 @@ public class Menu extends ArrayList<String> implements IMenu{
     public int getChoice() {
         return GetInput.getInt(" => Enter your choice: ", 1, this.size());
     }
-    
+
     @Override
     public void showMenu() {
         System.out.println("------------------- MENU -------------------");
         for (int i = 0; i < this.size(); i++) {
-            System.out.printf("| %2d.  %-25s %10s|\n", i+1, this.get(i), " ");
+            System.out.printf("| %2d.  %-25s %10s|\n", i + 1, this.get(i), " ");
         }
         System.out.println("--------------------------------------------");
     }
@@ -43,6 +42,7 @@ public class Menu extends ArrayList<String> implements IMenu{
             }
         }
     }
+
     // New method to simplify calling the back-to-menu confirmation
     public boolean confirmBackToMenu() {
         return confirmYesNo(BACK_TO_MENU_PROMPT);
