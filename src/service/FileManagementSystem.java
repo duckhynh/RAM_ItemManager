@@ -116,36 +116,48 @@ public class FileManagementSystem implements IFileManagement{
             System.out.print("Enter RAM Code to update: ");
             String code = scanner.nextLine();
 
-            // Tìm mục RAM hiện tại theo mã
-            List<RAMItem> foundItems = ramDAO.searchByType(code); // Giả sử mã là kiểu
+             // Tìm tất cả mục RAM hiện tại theo mã
+            List<RAMItem> foundItems = ramDAO.searchByType(code); // Tìm kiếm theo mã
             if (foundItems.isEmpty()) {
                 System.out.println("RAM item with this code not found.");
                 return;
             }
 
-            // Giả sử chỉ có một mã RAM duy nhất, lấy mục đầu tiên
-            RAMItem currentRAM = foundItems.get(0);
+            // Hiển thị thông tin hiện tại cho tất cả các mục
+            System.out.println("Current RAM Information:");
+            for (int i = 0; i < foundItems.size(); i++) {
+                System.out.println((i + 1) + ". " + foundItems.get(i));
+            }
 
-            // Hiển thị thông tin hiện tại
-            System.out.println("Current RAM Information: " + currentRAM);
+            // Nhập chỉ số của mục muốn cập nhật
+            System.out.print("Select item number to update (1-" + foundItems.size() + "): ");
+            int selectedIndex = Integer.parseInt(scanner.nextLine()) - 1;
 
+            // Kiểm tra chỉ số hợp lệ
+            if (selectedIndex < 0 || selectedIndex >= foundItems.size()) {
+                System.out.println("Invalid selection. Update canceled.");
+                return;
+            }
+
+            RAMItem currentRAM = foundItems.get(selectedIndex); // Lấy mục RAM được chọn
+
+            String busString = currentRAM.getBus(); // Lấy giá trị bus dưới dạng String
+            int currentBus = Integer.parseInt(busString); // Chuyển đổi sang int
+
+        
             // Nhập thông tin mới từ người dùng
-            System.out.print("Enter new type (or press Enter to keep current): ");
-            String newType = scanner.nextLine();
-            System.out.print("Enter new bus (or press Enter to keep current): ");
-            String newBus = scanner.nextLine();
-            System.out.print("Enter new brand (or press Enter to keep current): ");
-            String newBrand = scanner.nextLine();
-            System.out.print("Enter new quantity (or press Enter to keep current): ");
-            String newQuantityStr = scanner.nextLine();
+            String newType = GetInput.getNewString("Enter new type (or press Enter to keep current):", currentRAM.getType());
+            int newBus = GetInput.getNewInt("Enter new bus (or press Enter to keep current):", 0, 9999, currentBus);
+            String newBrand = GetInput.getNewString("Enter new brand (or press Enter to keep current):", currentRAM.getBrand());          
+            int newQuantityStr = GetInput.getNewInt("Enter new quantity (or press Enter to keep current): ", 0, 9999, currentRAM.getQuantity());
 
             // Tạo một đối tượng RAMItem mới với thông tin cập nhật
             RAMItem updatedRAM = new RAMItem(
             currentRAM.getCode(),
             newType.isEmpty() ? currentRAM.getType() : newType,
-            newBus.isEmpty() ? currentRAM.getBus() : newBus,
+            (newBus==currentBus) ? currentRAM.getBus() : String.valueOf(newBus),
             newBrand.isEmpty() ? currentRAM.getBrand() : newBrand,
-            newQuantityStr.isEmpty() ? currentRAM.getQuantity() : Integer.parseInt(newQuantityStr),
+            (newQuantityStr==0) ? currentRAM.getQuantity() : newQuantityStr,
             currentRAM.getProductMonthYear(), // Giữ nguyên ngày sản xuất
             currentRAM.isActive() // Thêm trạng thái 'active'
         );
